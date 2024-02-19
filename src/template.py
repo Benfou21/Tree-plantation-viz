@@ -51,7 +51,6 @@ def create_custom_theme():
     
     template = go.layout.Template()
     
-    #Defining the Template
     template.layout = go.Layout(
         font=dict(family=THEME['font_family'], color=THEME['dark_color']),
         paper_bgcolor=THEME['background_color'],

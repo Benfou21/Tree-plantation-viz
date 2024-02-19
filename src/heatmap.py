@@ -22,13 +22,10 @@ def get_figure(data):
 
     # TODO : Create the heatmap. Make sure to set dragmode=False in
     
-    fig = px.imshow(data)
-
-    # Set title of color bar to 'Trees'
-    fig.update_layout(coloraxis_colorbar=dict(title='Trees')) 
-
-    # Set dragmode to False in the layout
+    fig = px.imshow(data,aspect="auto")
+    
     fig.update_layout(
+        coloraxis_colorbar=dict(title='Trees'),
         dragmode=False,
         xaxis=dict
         (
@@ -49,9 +46,6 @@ def get_figure(data):
     
 
     fig.update_traces(hovertemplate=hover_template.get_heatmap_hover_template())
-
-    # Include the hover template
-   
 
     return fig
 

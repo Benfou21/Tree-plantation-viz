@@ -92,6 +92,10 @@ def get_figure(line_data, arrond, year):
             title_font=dict(size=18),
             tickfont=dict(size=THEME["label_font_size"])
         ),
+        xaxis=dict
+        (
+            tickfont=dict(size=THEME["label_font_size"]),
+        ),
         hoverlabel=dict(font=dict(family="Roboto", size=16, color="black"))
     )
     

@@ -34,11 +34,11 @@ def filter_years(dataframe, start, end):
     '''
     # TODO : Filter by dates
     
-    # Convert start and end (int) to date time (start of the year & end of the year)
+    # Converting to datetime
     start = pd.to_datetime(f'{start}-01-01')
     end = pd.to_datetime(f'{end}-12-31')
     
-    # Filter with start & end
+    # Filter
     dataframe = dataframe[(dataframe['Date_Plantation'] >= start) & (dataframe['Date_Plantation'] <= end)]
     
     return dataframe.sort_values(by='Date_Plantation')
@@ -60,19 +60,14 @@ def summarize_yearly_counts(dataframe):
     '''
     # TODO : Summarize df
     
-    # Add a col Year
+    
     dataframe['Year'] = dataframe['Date_Plantation'].dt.year
     
-    # Group by Arrond_Nom and Year, count of col
     resume = dataframe.groupby(['Arrond_Nom','Year']).count()
-    
-    # Rename a col Count
     resume = resume.rename(columns={'Arrond': 'Count'})
     
-    # Remove the others cols
     resume = resume.drop(columns=['Latitude', 'Longitude'])
     
-    # Reset index to have a useable dataframe for the next function
     resume = resume.reset_index()
 
     return resume
@@ -98,10 +93,9 @@ def restructure_df(yearly_df):
     '''
     # TODO : Restructure df and fill empty cells with 0
     
-    # Pivot to have index as Arrond_Nom, columns as Year & values as Count
     restructure_df = yearly_df.pivot(index='Arrond_Nom', columns='Year', values='Count')
     
-    # Replace missing values with 0
+    # Replace empty with 0
     restructure_df = restructure_df.fillna(0)
     return restructure_df
 
@@ -132,10 +126,8 @@ def get_daily_info(dataframe, arrond, year):
                     (dataframe['Arrond_Nom'] == arrond)
                     ]
     
-    # Group by Date and count of line
-    daily_info = daily_info.groupby(pd.Grouper(key='Date_Plantation')).count()
     
-    # Rename a col into Count
+    daily_info = daily_info.groupby(pd.Grouper(key='Date_Plantation')).count()
     daily_info = daily_info.rename(columns={'Arrond': 'Count'})
     
     # Remove useless cols
@@ -147,19 +139,15 @@ def get_daily_info(dataframe, arrond, year):
     # Sort by date
     daily_info = daily_info.sort_values(by='Date_Plantation')
     
-    # Add days without plantation to the list between the first day and the last day
-    # Get the min date and the max date
+
     start_date = daily_info['Date_Plantation'].min()
     end_date = daily_info['Date_Plantation'].max()
     
-    # Generate a date range between start and end dates
     date_range = pd.date_range(start=start_date, end=end_date, freq='D')
     complete_df = pd.DataFrame({'Date_Plantation': date_range})
     
-    # Merge the complete DataFrame with the original DataFrame
-    daily_info = pd.merge(complete_df, daily_info, on='Date_Plantation', how='left')
     
-    # Replace missing values with 0
+    daily_info = pd.merge(complete_df, daily_info, on='Date_Plantation', how='left')
     daily_info = daily_info.fillna(0)
     
     return daily_info
