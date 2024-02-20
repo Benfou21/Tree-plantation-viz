@@ -83,6 +83,8 @@ def get_figure(line_data, arrond, year):
             The figure to be displayed
     '''
     # TODO : Construct the required figure. Don't forget to include the hover template
+    
+    
     fig = go.Figure(data=go.Scatter(x=line_data.Date_Plantation, y=line_data.Count, line= dict(color=THEME["line_chart_color"], width =2)))
     
     fig.update_layout(title=f'Trees planted in {arrond} in {year}',
@@ -95,6 +97,7 @@ def get_figure(line_data, arrond, year):
         xaxis=dict
         (
             tickfont=dict(size=THEME["label_font_size"]),
+            tickformat="%d %b"
         ),
         hoverlabel=dict(font=dict(family="Roboto", size=16, color="black"))
     )
